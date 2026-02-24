@@ -1,0 +1,87 @@
+# .github/workflows/build-release.yml
+#
+# Automatically compiles FiveM_Cache_Cleaner.exe and publishes it as a
+# downloadable asset on a new GitHub Release whenever a version tag is pushed.
+#
+# How to trigger a release:
+#   git tag v1.0.0
+#   git push origin v1.0.0
+#
+# The release will appear at:
+#   https://github.com/maxionice/Clean-Fivem-Cache/releases
+
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - "v*"          # matches v1.0.0, v1.2.3, etc.
+
+# Required so the workflow can create a GitHub Release and upload assets.
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build .exe on Windows
+    runs-on: windows-latest
+
+    steps:
+      # ------------------------------------------------------------------ #
+      # 1. Check out the repository at the pushed tag
+      # ------------------------------------------------------------------ #
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ------------------------------------------------------------------ #
+      # 2. Set up Python (must match the version used in development)
+      # ------------------------------------------------------------------ #
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ------------------------------------------------------------------ #
+      # 3. Install all dev dependencies (PyInstaller + pytest)
+      # ------------------------------------------------------------------ #
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      # ------------------------------------------------------------------ #
+      # 4. Run the test suite - abort the workflow if any test fails
+      # ------------------------------------------------------------------ #
+      - name: Run tests
+        run: python -m pytest tests/ -v
+
+      # ------------------------------------------------------------------ #
+      # 5. Compile to a single standalone .exe
+      #    --onefile   - bundle everything into one file, no Python needed
+      #    --console   - keep the console window so players can read output
+      #    --name      - output filename (without .exe, added automatically)
+      # ------------------------------------------------------------------ #
+      - name: Build executable
+        run: pyinstaller --onefile --console --name FiveM_Cache_Cleaner main.py
+
+      # ------------------------------------------------------------------ #
+      # 6. Create the GitHub Release and attach the .exe as a download
+      # ------------------------------------------------------------------ #
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "FiveM Cache Cleaner ${{ github.ref_name }}"
+          body: |
+            ## FiveM Cache Cleaner ${{ github.ref_name }}
+
+            ### How to use
+            1. Close FiveM completely.
+            2. Download `FiveM_Cache_Cleaner.exe` below.
+            3. Double-click it - done. FiveM will restart automatically.
+
+            ### What gets deleted
+            - `cache`
+            - `server-cache`
+            - `server-cache-priv`
+
+            `game-storage` (your downloaded game files) is **never** touched.
+          files: dist/FiveM_Cache_Cleaner.exe
+          generate_release_notes: false

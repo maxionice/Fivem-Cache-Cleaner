@@ -1,0 +1,5 @@
+# Development & build dependencies
+# Install with:  pip install -r requirements-dev.txt
+
+pyinstaller==6.19.0
+pytest==8.3.5
