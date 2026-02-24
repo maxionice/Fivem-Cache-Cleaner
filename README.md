@@ -54,7 +54,7 @@ The tool automatically finds FiveM regardless of install location:
 ## 🗂️ Project Structure
 
 ```
-Clean-Fivem-Cache/
+Fivem-Cache-Cleaner/
 ├── .github/
 │   └── workflows/
 │       └── build-release.yml   # Auto-builds .exe and publishes a Release on tag push
@@ -99,8 +99,8 @@ build.bat
 ### Publish a new release
 
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.2.3
+git push origin v1.2.3
 ```
 
 GitHub Actions will automatically build the `.exe` and attach it to a new Release.
