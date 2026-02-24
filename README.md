@@ -51,7 +51,10 @@ The tool automatically finds FiveM regardless of install location:
 
 ---
 
-## 🗂️ Project Structure
+<details>
+<summary>🗂️ Project Structure & Developer Info</summary>
+
+### Project Structure
 
 ```
 Fivem-Cache-Cleaner/
@@ -71,10 +74,6 @@ Fivem-Cache-Cleaner/
 ├── requirements-dev.txt        # Dev dependencies (PyInstaller, pytest)
 └── .gitignore
 ```
-
----
-
-## 🛠️ For Developers
 
 ### Run locally
 
@@ -104,6 +103,8 @@ git push origin v1.2.3
 ```
 
 GitHub Actions will automatically build the `.exe` and attach it to a new Release.
+
+</details>
 
 ---
 
