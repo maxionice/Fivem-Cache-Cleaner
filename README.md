@@ -95,14 +95,6 @@ build.bat
 # Output: dist\FiveM_Cache_Cleaner.exe
 ```
 
-### Publish a new release
-
-```bash
-git tag v1.2.3
-git push origin v1.2.3
-```
-
-GitHub Actions will automatically build the `.exe` and attach it to a new Release.
 
 </details>
 
